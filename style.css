@@ -1,0 +1,10 @@
+.play-button, .stop-button, .pause-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0;
+}
+.hidden {
+    display: none;
+}

@@ -18,8 +18,22 @@ function toggleButtons() {
     }
 }
 function toggleButtons2(){
+    // Referencias dos botões
     var pauseButton = document.getElementById('pauseButton');
-    
+    var replayButton = document.getElementById('replayButton');
+
+    if(pauseButton.classList.contains('hidden')){
+        pauseButton.classList.remove('hidden');
+        replayButton.classList.add('hidden');
+        timerText.classList.remove('hidden')
+        timerText.textContent = "O timer retomou às" + getCurrentTime() + "horas."
+    }
+    else {
+        pauseButton.classList.add('hidden');
+        replayButton.classList.remove('hidden');
+        timerText.classList.remove('hidden')
+        timerText.textContent = "O timer pausou às" + getCurrentTime() + "horas.";
+    }
 }
 
 function formatTwoDigits(number) {

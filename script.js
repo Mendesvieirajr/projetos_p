@@ -1,62 +1,62 @@
-function donot(){
-    return !playbutton.classlistcontains('hidden');
-}
 
-function toggleButtons() {
-    // Obter referências aos botões
+var timerInterval;
+var startTime;
+var pausedTime = 0;
+var isTimerRunning = false;
+
+function toggleTimer(action) {
     var playButton = document.getElementById('playButton');
     var stopButton = document.getElementById('stopButton');
     var pauseButton = document.getElementById('pauseButton');
     var timerText = document.getElementById('timerText');
 
-    // Alternar a visibilidade dos botões
-    if (playButton.classList.contains('hidden')) {
-        playButton.classList.remove('hidden');
-        stopButton.classList.add('hidden');
-        pauseButton.classList.remove('hidden');
-        timerText.classList.remove('hidden');
-        timerText.textContent = "O timer parou às " + getCurrentTime() + " horas.";
-    }
-
-    else {
-        pauseButton.classList.remove('hidden');
-        playButton.classList.add('hidden');
-        stopButton.classList.remove('hidden');
-        timerText.classList.remove('hidden');
-        timerText.textContent = "O timer começou às " + getCurrentTime() + " horas.";
-    }
-    
+    if (action ==='play') {
+        if(!isTimerRunning){
+            startTime = new Date().getTime();
+            timerInterval = setInterval(updateTimer, 1000);
+            isTimerRunning = true;
+            playButton.classList.add('hidden');
+            stopButton.classList.remove('hidden');
+            pauseButton.classList.remove('hidden');
+            timerText.classList.remove('hidden');
+            timerText.textContent = "O timer começou às " + getCurrentTime(startTime) + " horas.";
+            
+            
+    }}
+    else if (action === 'stop') {
+        if (isTimerRunning) {
+            clearInterval(timerInterval);
+            pausedTime += new Date().getTime() - startTime;
+            isTimerRunning = false;
+            playButton.classList.remove('hidden');
+            stopButton.classList.remove('hidden');
+            pauseButton.classList.add('hidden');
+            timerText.textContent = "O timer parou às " + getCurrentTime(new Date().getTime() - pausedTime) + " horas.";
+            }
+        }else if (action === 'pause') {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            pausedTime = 0;
+            playButton.classList.remove('hidden');
+            stopButton.classList.add('hidden');
+            pauseButton.classList.add('hidden');
+            timerText.textContent = "O timer está parado.";
+        } 
 }
-function toggleButtons2(){
-    var playButton = document.getElementById('playButton');
-    var stopButton = document.getElementById('stopButton');
-    var pauseButton = document.getElementById('pauseButton');
-    var timerText = document.getElementById('timerText');
 
-    if(pauseButton.classList.contains('hidden')){
-        pauseButton.classList.remove('hidden');
-        playButton.classList.add('hidden');
-        timerText.classList.remove('hidden');
-        timerText.textContent = "O timer retomou às " + getCurrentTime() + " horas.";
-    } else {
-        pauseButton.classList.add('hidden');
-        playButton.classList.remove('hidden');
-        timerText.classList.remove('hidden');
-        if (stopButton.classList.contains('hidden')) {
-            timerText.textContent = "O timer parou às " + getCurrentTime() + " horas.";
-        } else {
-            timerText.textContent = "O timer começou às " + getCurrentTime() + " horas.";
-        }
-    }
+
+function updateTimer() {
+    var timerText = document.getElementById('timerText');
+    timerText.textContent = "O timer está rodando há " + formatTime(new Date().getTime() - startTime - pausedTime) + ".";
+}
+
+function getCurrentTime(time) {
+    var date = new Date(time);
+    var hours = formatTwoDigits(date.getHours());
+    var minutes = formatTwoDigits(date.getMinutes());
+    return hours + ":" + minutes;
 }
 
 function formatTwoDigits(number) {
-    return number < 10 ? '0' + number : number;
-}
-
-function getCurrentTime() {
-    var now = new Date();
-    var hours = now.getHours();
-    var minutes = now.getMinutes();
-    return hours + ":" + formatTwoDigits(minutes);
+    return (number < 10 ? '0' : '') + number;
 }
